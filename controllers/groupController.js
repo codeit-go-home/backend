@@ -61,10 +61,12 @@ exports.updateGroup = async (req, res) => {
 
   try {
     const group = await Group.findById(groupId);
-    if (!group || group.password !== password) {
+    if (!group) return res.status(404).json({ error: '그룹을 찾을 수 없습니다.' });
+    if (group.password !== password) {
       return res.status(403).json({ error: '비밀번호가 일치하지 않습니다.' });
     }
 
+    // 그룹 정보 업데이트
     group.groupName = groupName || group.groupName;
     group.imageUrl = imageUrl || group.imageUrl;
     group.description = description || group.description;
@@ -84,11 +86,13 @@ exports.deleteGroup = async (req, res) => {
 
   try {
     const group = await Group.findById(groupId);
-    if (!group || group.password !== password) {
+    if (!group) return res.status(404).json({ error: '그룹을 찾을 수 없습니다.' });
+    if (group.password !== password) {
       return res.status(403).json({ error: '비밀번호가 일치하지 않습니다.' });
     }
 
-    await group.remove();
+    // 그룹 삭제
+    await Group.findByIdAndDelete(groupId); // 수정된 부분
     res.json({ message: '그룹이 삭제되었습니다.' });
   } catch (error) {
     res.status(500).json({ error: error.message });
