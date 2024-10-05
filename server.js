@@ -5,9 +5,6 @@ require('dotenv').config();
 
 const groupRoutes = require('./routes/groupRoutes');
 const postRoutes = require('./routes/postRoutes');
-const uri = 'mongodb+srv://20221370:123456789@codeit-toy.lj1me.mongodb.net/codeit-toy?retryWrites=true&w=majority';
-
-// Group 모델 가져오기
 const Group = require('./models/Group');
 
 const app = express();
@@ -45,10 +42,14 @@ app.get('/api/test-groups', async (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 // MongoDB 연결
-mongoose.connect(process.env.MONGO_URI, {
+const uri = process.env.MONGO_URI || 'mongodb+srv://20221370:123456789@codeit-toy.lj1me.mongodb.net/codeit-toy?retryWrites=true&w=majority';
+
+mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => {
-  console.log('MongoDB Connected');
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}).catch(err => console.log(err));
+})
+  .then(() => {
+    console.log('MongoDB Connected');
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch(err => console.log(err));

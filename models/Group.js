@@ -1,12 +1,15 @@
 const mongoose = require('mongoose');
 
 const groupSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  groupName: { type: String, required: true },
+  imageUrl: String,
   description: String,
-  createdAt: { type: Date, default: Date.now }
+  isPublic: { type: Boolean, default: true },
+  password: String,
+  postCount: { type: Number, default: 0 },
+  likes: { type: Number, default: 0 },
+  badgeCount: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now },
 });
 
-const Group = mongoose.model('Group', groupSchema);
-
-module.exports = Group;
-
+module.exports = mongoose.model('Group', groupSchema);
