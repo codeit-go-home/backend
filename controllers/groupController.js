@@ -107,9 +107,12 @@ exports.likeGroup = async (req, res) => {
     const group = await Group.findById(groupId);
     if (!group) return res.status(404).json({ error: '그룹을 찾을 수 없습니다.' });
 
+    // 공감 수 증가
     group.likes += 1;
     await group.save();
-    res.json(group);
+
+    // 성공 메시지 반환
+    res.status(200).json({ message: '그룹 공감하기 성공' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
