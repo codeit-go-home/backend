@@ -1,14 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-require('dotenv').config();
+require('dotenv').config(); // .env 파일에서 환경 변수 로드
 
 const groupRoutes = require('./routes/groupRoutes');
 const postRoutes = require('./routes/postRoutes');
-const uri = 'mongodb+srv://20221370:123456789@codeit-toy.lj1me.mongodb.net/codeit-toy?retryWrites=true&w=majority';
-
-// Group 모델 가져오기
-const Group = require('./models/Group');
+const Group = require('./models/Group'); // Group 모델 가져오기
 
 const app = express();
 

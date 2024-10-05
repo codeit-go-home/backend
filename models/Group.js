@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 
 const groupSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  description: String,
-  createdAt: { type: Date, default: Date.now }
+  groupName: { type: String, required: true },
+  imageUrl: { type: String, required: false },
+  description: { type: String, required: false },
+  isPublic: { type: Boolean, default: true },
+  password: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+  likes: { type: Number, default: 0 },
+  postCount: { type: Number, default: 0 },  // 게시글 수
+  badgeCount: { type: Number, default: 0 }, // 획득 배지수
+  memoryCount: { type: Number, default: 0 }, // 추억수
 });
 
-const Group = mongoose.model('Group', groupSchema);
-
-module.exports = Group;
-
+module.exports = mongoose.model('Group', groupSchema);
