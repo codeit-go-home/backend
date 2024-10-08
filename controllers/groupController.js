@@ -136,4 +136,22 @@ exports.verifyPassword = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: '서버 오류', error: error.message });
   }
+
+  
+};
+// 그룹 공개 여부 확인
+exports.getGroupIsPublic = async (req, res) => {
+  const { groupId } = req.params;
+  
+  try {
+    const group = await Group.findById(groupId, 'isPublic');
+    if (!group) return res.status(404).json({ error: '그룹을 찾을 수 없습니다.' });
+
+    res.status(200).json({
+      id: groupId,
+      isPublic: group.isPublic,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };

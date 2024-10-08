@@ -23,4 +23,7 @@ router.post('/:groupId/like', groupController.likeGroup);
 // 그룹 권한 확인 
 router.post('/:groupId/verify-password', groupController.verifyPassword);
 
+// 그룹 공개 여부 확인
+router.get('/:groupId/is-public', groupController.getGroupIsPublic);
+
 module.exports = router;
