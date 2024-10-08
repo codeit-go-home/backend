@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const groupController = require('../controllers/groupController');
-const auth = require('../middleware/auth');
 
 // 그룹 등록
 router.post('/', groupController.createGroup);
@@ -20,5 +19,8 @@ router.delete('/:groupId', groupController.deleteGroup);
 
 // 그룹 공감하기
 router.post('/:groupId/like', groupController.likeGroup);
+
+// 그룹 권한 확인 
+router.post('/:groupId/verify-password', groupController.verifyPassword);
 
 module.exports = router;

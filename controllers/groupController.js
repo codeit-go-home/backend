@@ -117,3 +117,23 @@ exports.likeGroup = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// 그룹 조회 권한을 위한 비밀번호 확인
+exports.verifyPassword = async (req, res) => {
+  const { groupId } = req.params;
+  const { password } = req.body;
+
+  try {
+    const group = await Group.findById(groupId);
+    if (!group) return res.status(404).json({ message: '그룹을 찾을 수 없습니다' });
+
+    // 비밀번호 확인
+    if (group.password === password) {
+      return res.status(200).json({ message: '비밀번호가 확인되었습니다' });
+    } else {
+      return res.status(401).json({ message: '비밀번호가 틀렸습니다' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: '서버 오류', error: error.message });
+  }
+};
