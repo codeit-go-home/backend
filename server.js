@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const multer = require('multer'); // multer 추가
 require('dotenv').config();
 
 const groupRoutes = require('./routes/groupRoutes');
@@ -9,6 +10,10 @@ const Group = require('./models/Group');
 
 const app = express();
 
+// multer 설정
+const storage = multer.memoryStorage(); // 메모리 스토리지 사용
+const upload = multer({ storage });
+
 // 미들웨어 설정
 app.use(cors());
 app.use(express.json());
@@ -16,6 +21,18 @@ app.use(express.json());
 // 라우트 설정
 app.use('/api/groups', groupRoutes);
 app.use('/api/posts', postRoutes);
+
+// 이미지 업로드 라우트 추가
+app.post('/api/image', upload.single('image'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+  
+  // 여기에 이미지 URL 생성 로직 추가 (예: S3에 업로드 등)
+  const imageUrl = 'some_generated_url'; // 실제 URL 생성 로직으로 대체
+
+  res.json({ imageUrl });
+});
 
 // 테스트용 라우트 추가
 app.post('/api/test-group', async (req, res) => {

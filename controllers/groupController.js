@@ -1,5 +1,37 @@
 const Group = require('../models/Group');
+// 배지 조건 체크 함수
+const checkAndAwardBadges = async (group) => {
+  const currentDate = new Date();
+  const oneYearInMillis = 365 * 24 * 60 * 60 * 1000;
+  const oneYearPassed = (currentDate - group.createdAt) >= oneYearInMillis;
 
+  // 7일 연속 추억 등록 배지
+  if (!group.badges.sevenDayStreak && group.postCount >= 7) {
+    group.badges.sevenDayStreak = true;
+  }
+
+  // 20개 이상 추억 등록 배지
+  if (!group.badges.twentyPosts && group.postCount >= 20) {
+    group.badges.twentyPosts = true;
+  }
+
+  // 그룹 생성 1년 달성 배지
+  if (!group.badges.oneYearAnniversary && oneYearPassed) {
+    group.badges.oneYearAnniversary = true;
+  }
+
+  // 1만 개 공감받기 배지
+  if (!group.badges.tenThousandLikes && group.likes >= 10000) {
+    group.badges.tenThousandLikes = true;
+  }
+
+  // 1만 개 추억 등록 배지
+  if (!group.badges.tenThousandPosts && group.postCount >= 10000) {
+    group.badges.tenThousandPosts = true;
+  }
+
+  await group.save();
+};
 // 그룹 등록
 exports.createGroup = async (req, res) => {
   const { groupName, imageUrl, description, isPublic, password } = req.body;
@@ -54,10 +86,10 @@ exports.getGroup = async (req, res) => {
   }
 };
 
-// 그룹 수정
+// 그룹 수정 (추억 등록 증가 후 배지 업데이트)
 exports.updateGroup = async (req, res) => {
   const { groupId } = req.params;
-  const { groupName, imageUrl, description, isPublic, password } = req.body;
+  const { groupName, imageUrl, description, isPublic, password, postCount } = req.body;
 
   try {
     const group = await Group.findById(groupId);
@@ -71,7 +103,9 @@ exports.updateGroup = async (req, res) => {
     group.imageUrl = imageUrl || group.imageUrl;
     group.description = description || group.description;
     group.isPublic = isPublic !== undefined ? isPublic : group.isPublic;
+    group.postCount = postCount || group.postCount;
 
+    await checkAndAwardBadges(group); // 배지 체크 및 업데이트
     const updatedGroup = await group.save();
     res.json(updatedGroup);
   } catch (error) {
@@ -109,7 +143,7 @@ exports.likeGroup = async (req, res) => {
 
     // 공감 수 증가
     group.likes += 1;
-    await group.save();
+    await checkAndAwardBadges(group); // 배지 체크 및 업데이트
 
     // 성공 메시지 반환
     res.status(200).json({ message: '그룹 공감하기 성공' });
@@ -151,6 +185,19 @@ exports.getGroupIsPublic = async (req, res) => {
       id: groupId,
       isPublic: group.isPublic,
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// 그룹 배지 조회 API
+exports.getBadges = async (req, res) => {
+  const { groupId } = req.params;
+
+  try {
+    const group = await Group.findById(groupId);
+    if (!group) return res.status(404).json({ error: '그룹을 찾을 수 없습니다.' });
+
+    res.status(200).json({ badges: group.badges });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

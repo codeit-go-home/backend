@@ -26,4 +26,7 @@ router.post('/:groupId/verify-password', groupController.verifyPassword);
 // 그룹 공개 여부 확인
 router.get('/:groupId/is-public', groupController.getGroupIsPublic);
 
+// 그룹 배지 조회
+router.get('/:groupId/badges', groupController.getBadges);
+
 module.exports = router;
