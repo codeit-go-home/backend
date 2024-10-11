@@ -1,12 +1,16 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const router = express.Router();
+const commentController = require('../controllers/commentController');
+const { validateCommentData } = require('../utils/validation');
 
-const commentSchema = new mongoose.Schema({
-    postId: { type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true }, // 게시글 ID
-    nickname: { type: String, required: true },
-    content: { type: String, required: true },
-    password: { type: String, required: true }, // 비밀번호는 해시된 형태로 저장
-}, {
-    timestamps: true // 생성일, 수정일 자동 생성
-});
+// 댓글 등록
+router.post('/posts/:postId/comments', validateCommentData, commentController.createComment);
+// 댓글 목록 조회
+router.get('/posts/:postId/comments', validateGetCommentsQuery, commentController.getCommentsByPostId);
+// 댓글 수정
+router.put('/comments/:commentId', validateUpdateCommentData, commentController.updateComment);
+// 댓글 삭제
+router.delete('/comments/:commentId', validateDeleteCommentData, commentController.deleteComment);
 
-module.exports = mongoose.model('Comment', commentSchema);
+
+module.exports = router;
