@@ -19,6 +19,7 @@ app.use(express.json());
 // 라우트 설정
 app.use('/api/groups', groupRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api', commentRoutes);
 
 // 테스트용 라우트 추가
 app.post('/api/test-group', async (req, res) => {
