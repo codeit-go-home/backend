@@ -7,6 +7,7 @@ require('dotenv').config();
 const groupRoutes = require('./routes/groupRoutes');
 const postRoutes = require('./routes/postRoutes');
 const Group = require('./models/Group');
+const commentRoutes = require('./routes/commentRoutes');
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.use(express.json());
 
 // 라우트 설정
 app.use('/api/groups', groupRoutes);
-app.use('/api/posts', postRoutes);
+app.use('/api', postRoutes);
 app.use('/api', commentRoutes);
 
 // 이미지 업로드 라우트 추가
