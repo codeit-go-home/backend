@@ -1,6 +1,6 @@
 const Comment = require('../models/Comment');
 const Post = require('../models/Post');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 // 댓글 등록 함수
 exports.createComment = async (req, res) => {
