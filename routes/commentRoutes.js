@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const commentController = require('../controllers/commentController');
-const { validateCommentData } = require('../utils/validation');
+const { validateCommentData,validateGetCommentsQuery,validateUpdateCommentData,validateDeleteCommentData } = require('../utils/validation');
 
 // 댓글 등록
 router.post('/posts/:postId/comments', validateCommentData, commentController.createComment);

@@ -40,6 +40,8 @@ exports.validateUpdatePostData = (req, res, next) => {
     next();
 };
 
+
+
 exports.validateDeletePostData = (req, res, next) => {
     const { postPassword } = req.body;
 
@@ -61,17 +63,17 @@ exports.validatePostId = (req, res, next) => {
 
     next();
 };
-
 exports.validateVerifyPostPassword = (req, res, next) => {
     const { password } = req.body;
 
     // 비밀번호가 없는 경우
     if (!password) {
-        return res.status(400).json({ message: '비밀번호를 입력해주세요.' });
+        return res.status(400).json({ message: '잘못된 요청입니다. 비밀번호를 입력해주세요.' });
     }
 
     next();
 };
+
 
 exports.validatePostId = (req, res, next) => {
     const { postId } = req.params;
@@ -138,5 +140,6 @@ exports.validateDeleteCommentData = (req, res, next) => {
 
     next();
 };
+
 
 

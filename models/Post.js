@@ -1,7 +1,7 @@
  const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
-    groupId: { type: Number, required: true }, // 그룹 ID 추가
+    groupId: { type: String, required: true }, // 그룹 ID 추가
     nickname: { type: String, required: true },
     title: { type: String, required: true },
     content: { type: String, required: true },
